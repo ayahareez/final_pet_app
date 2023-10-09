@@ -67,6 +67,7 @@ class _FavPageState extends State<FavPage> {
                           pet: snapshot.data!
                               .where((pet) => pet.isFav == true)
                               .toList()[index],
+                          onFavState: () => setState(() {}),
                         ),
                         itemCount: snapshot.data!
                             .where((pet) => pet.isFav == true)

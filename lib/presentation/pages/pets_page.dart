@@ -119,6 +119,7 @@ class _PetPageState extends State<PetPage> {
                       ),
                       itemBuilder: (BuildContext context, int index) => PetItem(
                         pet: snapshot.data![index],
+                        onFavState: () {},
                       ),
                       itemCount: snapshot.data!.length,
                     );

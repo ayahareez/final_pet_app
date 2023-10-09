@@ -8,10 +8,10 @@ import '../../data/data_source/data_source.dart';
 import '../pages/page_pet_info.dart';
 
 class PetItem extends StatefulWidget {
-  //final int index;
   final Pet pet;
+  final Function onFavState;
 
-  const PetItem({super.key, required this.pet});
+  const PetItem({super.key, required this.pet, required this.onFavState});
 
   @override
   State<PetItem> createState() => _PetItemState();
@@ -75,6 +75,7 @@ class _PetItemState extends State<PetItem> {
                         setState(() {});
                         List<String> pets = pref.getStringList('pets') ?? [];
                         print(pets);
+                        widget.onFavState();
                       })
                 ],
               ),
