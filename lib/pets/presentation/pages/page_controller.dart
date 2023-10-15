@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:frist_project/data/models/user_data.dart';
-import 'package:frist_project/presentation/pages/adopted_pet_page.dart';
-import 'package:frist_project/presentation/pages/fav_page.dart';
-import 'package:frist_project/presentation/pages/pets_page.dart';
+import 'package:frist_project/pets/presentation/pages/adopted_pet_page.dart';
+import 'package:frist_project/pets/presentation/pages/fav_page.dart';
+import 'package:frist_project/pets/presentation/pages/pets_page.dart';
 
 class ControllerPage extends StatefulWidget {
   const ControllerPage({super.key});

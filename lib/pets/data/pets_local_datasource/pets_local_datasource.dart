@@ -1,9 +1,7 @@
 import 'dart:convert';
 
-import 'package:frist_project/data/models/pet.dart';
+import 'package:frist_project/pets/data/models/pet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../data_source.dart';
 
 abstract class PetsLocalData {
   ///this function returns all [Pet]s from the [SharedPreferences]
@@ -25,7 +23,6 @@ abstract class PetsLocalData {
   /// this function adds Adopted [Pet] to the [SharedPreferences]
   /// and it takes the [Pet] id as parameter
   Future<void> setAdoptedPet(String id);
-
 }
 
 class PetsLocalDataImpl extends PetsLocalData {
@@ -61,13 +58,6 @@ class PetsLocalDataImpl extends PetsLocalData {
     preferences.remove(petsKey);
   }
 
-
-  // Future<void> addPetsFirst() async {
-  //   for (int i = 0; i < pets.length; i++) {
-  //     await setPet(pets[i]);
-  //   }
-  // }
-
   @override
   Future<void> setFavPet(String id) async {
     List<Pet> pets = await getPets();
@@ -85,9 +75,9 @@ class PetsLocalDataImpl extends PetsLocalData {
     pref.remove(petsKey);
     for (int i = 0; i < pets.length; i++) {
       if (pets[i].id != id) {
-        setPet(pets[i]);
+        await setPet(pets[i]);
       } else {
-        setPet(pet);
+        await setPet(pet);
       }
     }
   }
@@ -110,7 +100,7 @@ class PetsLocalDataImpl extends PetsLocalData {
       if (pets[i].id != pet.id) {
         await setPet(pets[i]);
       } else {
-        setPet(pet);
+        await setPet(pet);
       }
     }
   }

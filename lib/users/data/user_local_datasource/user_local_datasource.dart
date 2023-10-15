@@ -1,7 +1,8 @@
 import 'dart:convert';
 
-import 'package:frist_project/data/models/user_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../models/user_data.dart';
 
 abstract class UserLocalData {
   ///this function returns a [UserData] from the[shared_preference]

@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:frist_project/data/data_source/pets_local_datasource/pets_local_datasource.dart';
-import 'package:frist_project/data/models/pet.dart';
+import 'package:frist_project/pets/data/models/pet.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../data/data_source/data_source.dart';
+import '../../data/pets_local_datasource/pets_local_datasource.dart';
+import '../bloc/pet_bloc.dart';
 import '../pages/page_pet_info.dart';
 
 class PetItem extends StatefulWidget {
   final Pet pet;
-  final Function onFavState;
 
-  const PetItem({super.key, required this.pet, required this.onFavState});
+  const PetItem({super.key, required this.pet});
 
   @override
   State<PetItem> createState() => _PetItemState();
@@ -69,14 +68,10 @@ class _PetItemState extends State<PetItem> {
                           isFav = value!;
                           widget.pet.isFav = value;
                         });
-                        await PetsLocalDataImpl().setFavPet(widget.pet.id);
-                        final pref = await SharedPreferences.getInstance();
-                        await PetsLocalDataImpl().getPets();
-                        setState(() {});
-                        List<String> pets = pref.getStringList('pets') ?? [];
-                        print(pets);
-                        widget.onFavState();
-                      })
+                        context
+                            .read<PetBloc>()
+                            .add(SetFavPet(id: widget.pet.id));
+                      }),
                 ],
               ),
             ),

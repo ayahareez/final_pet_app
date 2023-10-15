@@ -1,17 +1,19 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:frist_project/data/data_source/data_source.dart';
-import 'package:frist_project/data/data_source/pets_local_datasource/pets_local_datasource.dart';
-import 'package:frist_project/data/data_source/user_local_datasource/user_local_datasource.dart';
-import 'package:frist_project/data/models/user_data.dart';
-import 'package:frist_project/presentation/pages/form_page.dart';
-import 'package:frist_project/presentation/pages/page_pet_info.dart';
-import 'package:frist_project/presentation/widgets/pet_grid_tile.dart';
-import 'package:frist_project/presentation/widgets/text_form_tile.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:frist_project/users/presentation/pages/form_page.dart';
+import 'package:frist_project/pets/presentation/pages/page_pet_info.dart';
+import 'package:frist_project/pets/presentation/widgets/pet_grid_tile.dart';
+import 'package:frist_project/pets/presentation/widgets/text_form_tile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../users/data/models/user_data.dart';
+import '../../../users/data/user_local_datasource/user_local_datasource.dart';
 import '../../data/models/pet.dart';
+import '../../data/pets_local_datasource/pets_local_datasource.dart';
+import '../bloc/pet_bloc.dart';
 
 class PetPage extends StatefulWidget {
   const PetPage({super.key});
@@ -21,31 +23,12 @@ class PetPage extends StatefulWidget {
 }
 
 class _PetPageState extends State<PetPage> {
-  List<Pet> pett = [];
   String userName = '';
-
-  getPets() async {
-    List<Pet> pett = await PetsLocalDataImpl().getPets();
-    print(pett);
-  }
-
-  getUserData() async {
-    if (await UserLocalDataImpl().hasSignedUP()) {
-      UserData userData = await UserLocalDataImpl().getUser();
-      print(userData);
-      String name = userData.name;
-      userName = name;
-      print(userName);
-      return userName;
-    }
-  }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    getPets();
-    getUserData();
+    context.read<PetBloc>().add(GetPets());
   }
 
   bool isShowBottomSheet = false;
@@ -99,18 +82,17 @@ class _PetPageState extends State<PetPage> {
           )
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Expanded(
-              child: FutureBuilder(
-                  future: PetsLocalDataImpl().getPets(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
-                    }
-                    return GridView.builder(
+      body: BlocBuilder<PetBloc, PetState>(
+        builder: (context, state) {
+          print(state);
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                if (state is PetLoadingState) CircularProgressIndicator(),
+                if (state is PetLoadedState)
+                  Expanded(
+                    child: GridView.builder(
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
@@ -118,18 +100,18 @@ class _PetPageState extends State<PetPage> {
                         crossAxisSpacing: 16,
                       ),
                       itemBuilder: (BuildContext context, int index) => PetItem(
-                        pet: snapshot.data![index],
-                        onFavState: () {},
+                        pet: state.pets[index],
                       ),
-                      itemCount: snapshot.data!.length,
-                    );
-                  }),
-            )
-          ],
-        ),
+                      itemCount: state.pets.length,
+                    ),
+                  )
+              ],
+            ),
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
-          onPressed: () async {
+          onPressed: () {
             if (isShowBottomSheet) {
               if (formKey.currentState!.validate()) {
                 Pet pet = Pet(
@@ -143,12 +125,7 @@ class _PetPageState extends State<PetPage> {
                 setState(() {
                   icon = Icons.edit;
                 });
-                await PetsLocalDataImpl().setPet(pet);
-                await PetsLocalDataImpl().getPets().then((value) {
-                  pett = value;
-                  print(value);
-                  setState(() {});
-                });
+                context.read<PetBloc>().add(SetPet(pet: pet));
               }
             } else {
               scaffoldKey.currentState!.showBottomSheet(

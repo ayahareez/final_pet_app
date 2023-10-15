@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:frist_project/data/data_source/pets_local_datasource/pets_local_datasource.dart';
-import 'package:frist_project/presentation/pages/form_page.dart';
-import 'package:frist_project/presentation/pages/page_controller.dart';
-import 'package:frist_project/presentation/pages/page_pet_info.dart';
-import 'package:frist_project/presentation/pages/pets_page.dart';
-import 'package:frist_project/presentation/pages/splash_screen.dart';
-import 'package:frist_project/presentation/widgets/pet_grid_tile.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frist_project/pets/presentation/bloc/pet_bloc.dart';
+import 'package:frist_project/users/presentation/bloc/user_bloc.dart';
+import 'package:frist_project/users/presentation/pages/form_page.dart';
+import 'package:frist_project/pets/presentation/pages/page_controller.dart';
+import 'package:frist_project/pets/presentation/pages/page_pet_info.dart';
+import 'package:frist_project/pets/presentation/pages/pets_page.dart';
+import 'package:frist_project/users/presentation/pages/splash_screen.dart';
+import 'package:frist_project/pets/presentation/widgets/pet_grid_tile.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiBlocProvider(providers: [
+    BlocProvider<PetBloc>(
+      create: (context) => PetBloc(),
+    ),
+    BlocProvider<UserBloc>(
+      create: (context) => UserBloc(),
+    ),
+  ], child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
