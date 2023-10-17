@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:frist_project/pets/data/models/pet.dart';
 import 'package:provider/provider.dart';
@@ -75,8 +77,8 @@ class _PetItemState extends State<PetItem> {
                 ],
               ),
             ),
-            child: Image.asset(
-              widget.pet.imageUrl,
+            child: Image.file(
+              File(widget.pet.imageUrl),
               width: 120,
               height: 120,
               fit: BoxFit.cover,

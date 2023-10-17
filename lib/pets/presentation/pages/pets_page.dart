@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +8,7 @@ import 'package:frist_project/users/presentation/pages/form_page.dart';
 import 'package:frist_project/pets/presentation/pages/page_pet_info.dart';
 import 'package:frist_project/pets/presentation/widgets/pet_grid_tile.dart';
 import 'package:frist_project/pets/presentation/widgets/text_form_tile.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../users/data/models/user_data.dart';
@@ -110,14 +112,16 @@ class _PetPageState extends State<PetPage> {
           );
         },
       ),
+      //'assets/images/istockphoto-455208643-612x612.jpg'
       floatingActionButton: FloatingActionButton(
-          onPressed: () {
+          onPressed: () async {
             if (isShowBottomSheet) {
               if (formKey.currentState!.validate()) {
+                File? imageFile = await getImage(ImageSource.gallery);
                 Pet pet = Pet(
                     id: idController.text,
                     name: nameController.text,
-                    imageUrl: 'assets/images/istockphoto-455208643-612x612.jpg',
+                    imageUrl: imageFile != null ? imageFile.path : '',
                     tips: 'any thing');
                 //pets.add(pet);
                 Navigator.pop(context);
@@ -159,19 +163,6 @@ class _PetPageState extends State<PetPage> {
                             const SizedBox(
                               height: 8,
                             ),
-                            // TextFormTile(
-                            //     controller: imageUrlController,
-                            //     type: TextInputType.text,
-                            //     decoration:const InputDecoration(
-                            //       labelText: "enter the Image URL",
-                            //       border: OutlineInputBorder(),
-                            //       prefix: Icon(
-                            //         Icons.watch_later,
-                            //       ),
-                            //     )),
-                            // const SizedBox(
-                            //    height: 8,
-                            //  ),
                             TextFormTile(
                                 controller: idController,
                                 type: TextInputType.number,
@@ -205,4 +196,12 @@ class _PetPageState extends State<PetPage> {
           child: Icon(icon)),
     );
   }
+}
+
+Future<File?> getImage(ImageSource source) async {
+  XFile? xFile = await ImagePicker().pickImage(source: source);
+  if (xFile != null) {
+    return File(xFile.path);
+  }
+  return null;
 }

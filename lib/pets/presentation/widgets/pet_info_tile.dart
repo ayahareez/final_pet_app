@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -38,53 +40,55 @@ class InfoTile extends StatelessWidget {
         },
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              Image.asset(
-                pet.imageUrl,
-                fit: BoxFit.fill,
-              ),
-              Text(
-                'ID: ${pet.id}',
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              Text(
-                'Name: ${pet.name}',
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              const Text(
-                'Tips:',
-                style:
-                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('${pet.tips}'),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () async {
-                    context.read<PetBloc>().add(SetAdoptedPet(id: pet.id));
-                  },
-                  style:
-                      ElevatedButton.styleFrom(backgroundColor: Colors.purple),
-                  child: const Text('ADOPT',
-                      style: TextStyle(color: Colors.white)),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Image.file(
+                  File(pet.imageUrl),
+                  fit: BoxFit.fill,
                 ),
-              ),
-            ],
+                Text(
+                  'ID: ${pet.id}',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                Text(
+                  'Name: ${pet.name}',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                const Text(
+                  'Tips:',
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 18),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('${pet.tips}'),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      context.read<PetBloc>().add(SetAdoptedPet(id: pet.id));
+                    },
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.purple),
+                    child: const Text('ADOPT',
+                        style: TextStyle(color: Colors.white)),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

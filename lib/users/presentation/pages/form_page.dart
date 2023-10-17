@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:frist_project/pets/presentation/pages/page_controller.dart';
 import 'package:frist_project/pets/presentation/pages/pets_page.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../pets/data/pets_local_datasource/pets_local_datasource.dart';
@@ -48,7 +49,7 @@ class _FormPageState extends State<FormPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white10,
+      backgroundColor: Colors.white,
       body: BlocConsumer<UserBloc, UserState>(
         builder: (context, state) {
           if (state is UserUnauthorized) {
@@ -61,18 +62,32 @@ class _FormPageState extends State<FormPage> {
                     double width = constraints.maxWidth;
                     return SizedBox(
                       width: double.infinity,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      child: Stack(
                         children: [
+                          Lottie.asset(
+                              'assets/animation/animation_lnuiyhyk.json',
+                              fit: BoxFit.contain),
                           Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+                              Text(
+                                'Pet App',
+                                style: TextStyle(
+                                    fontSize: 64,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.purple),
+                              ),
+                              SizedBox(
+                                height: 16,
+                              ),
                               TextFormField(
                                 controller: name,
-                                style: const TextStyle(color: Colors.grey),
+                                style: const TextStyle(
+                                    color: Colors.purple, fontSize: 18),
                                 decoration: InputDecoration(
                                   labelText: 'name',
                                   labelStyle:
-                                      const TextStyle(color: Colors.grey),
+                                      const TextStyle(color: Colors.purple),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(5),
                                   ),
@@ -89,11 +104,12 @@ class _FormPageState extends State<FormPage> {
                               ),
                               TextFormField(
                                 controller: email,
-                                style: const TextStyle(color: Colors.grey),
+                                style: const TextStyle(
+                                    color: Colors.purple, fontSize: 18),
                                 decoration: InputDecoration(
                                   labelText: 'Email',
                                   labelStyle:
-                                      const TextStyle(color: Colors.grey),
+                                      const TextStyle(color: Colors.purple),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(5),
                                   ),
@@ -116,11 +132,12 @@ class _FormPageState extends State<FormPage> {
                               ),
                               TextFormField(
                                 controller: password,
-                                style: const TextStyle(color: Colors.grey),
+                                style: const TextStyle(
+                                    color: Colors.purple, fontSize: 18),
                                 decoration: InputDecoration(
                                   labelText: 'Password',
                                   labelStyle:
-                                      const TextStyle(color: Colors.grey),
+                                      const TextStyle(color: Colors.purple),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(5),
                                   ),
@@ -157,11 +174,12 @@ class _FormPageState extends State<FormPage> {
                                   style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.purple),
                                   child: const Text(
-                                    'login',
-                                    style: TextStyle(color: Colors.white),
+                                    'LOGIN',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 18),
                                   ),
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ],
